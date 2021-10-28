@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/12.2.0/markdown-it.min.js" integrity="sha512-cTQeM/op796Fp1ZUxfech8gSMLT/HvrXMkRGdGZGQnbwuq/obG0UtcL04eByVa99qJik7WlnlQOr5/Fw5B36aw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    <link rel="stylesheet" href="./styles.css">
+    <script>
+        async function fetchMoviesJSON() {
+            
+            const response = await fetch('https://strapi.legisladoresmx.fun/posts/5');
+            const movies = await response.json();
+            console.log(movies.content);
+            
+            return movies;
+        }
+
+        fetchMoviesJSON().then(movies => {
+            var md = window.markdownit();
+            var result = md.render(movies.content);
+            
+            console.log("YES")
+            document.querySelector("#postTitle").innerHTML = movies.title;
+            document.querySelector("#textpost").innerHTML = result; // fetched movies
+            document.querySelector("#authorid").innerHTML = movies.user.username;
+            document.querySelector("#dateid").innerHTML = movies.published_at.substring(0,10);
+            console.log("YES");
+        });
+    </script>
+    <style>
+        .postTitle{
+            color: #111827;
+            font-weight: 800;
+            font-size: 2.25em;
+            margin-top: 0;
+            margin-bottom: 0.3333339em;
+            line-height: 1.1111111;}
+    </style>
+</head>
+<body>
+    <div class="grid grid-cols-12">
+        <div class="col-start-2 col-end-12 md:col-start-3 md:col-end-11 mt-6">
+        </div>   
+        <div class="col-start-2 col-end-12 md:col-start-3 md:col-end-11">
+            <h1 id='postTitle' class="postTitle"></h1>
+            <div class="flex space-x-1 mb-1">
+                <span><p class="font-medium text-sm">Author: </p></span>
+                <span id='authorid' class="font-light text-sm"></span>
+            </div>
+            <div class="flex space-x-1 mb-5">
+                <span><p class="font-medium text-sm">Published At: </p></span>
+                <span id='dateid' class="font-light text-sm"></span>
+            </div>
+            <span class='prose prose-indigo' id='textpost'></span>
+        </div>
+    </div>
+    
+</body>
+</html>
